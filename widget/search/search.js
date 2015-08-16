@@ -10,13 +10,20 @@
 // widget/search/search.js start
 
 var databaseconf = require(__dirname + '/../database/database');
-var conn = databaseconf.createConn();
 
 module.exports = function (key, callback) {
-    conn.query('SELECT *  FROM `CY_name` WHERE `name` LIKE \'%北%\' LIMIT 5', function (err, data) {
-        if(err){
-        
-        }else{
+    var conn = databaseconf.createConn();
+    var matchKey = 'name';
+    var likeKey = key.replace(/(.)/g, '$1%');
+    if (/^[a-z\s]*$/ig.test(key)) {
+        matchKey = 'indexName';
+        likeKey = key.replace(/(.)/g, '$1%');
+    }
+    conn.query('SELECT *  FROM `CY_name` WHERE `' + matchKey + '` LIKE \'' + likeKey + '\'  order by views DESC LIMIT 10', function (err, data) {
+        if (err) {
+
+        } else {
+            conn.end();
             callback && callback(data)
         }
     });

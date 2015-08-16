@@ -10,12 +10,11 @@
 // widget/views/views.js start
 
 var databaseconf = require(__dirname + '/../database/database');
-var conn = databaseconf.createConn();
 
 
-module.exports = function(info, callback){
-   conn.query('UPDATE `chengyu`.`CY_name` SET `views` = '+(+info.curviews+1)+' WHERE `CY_name`.`id` ='+ info.id,function(err, items, filed){
-        typeof callback === 'function' && callback(err, items, filed); 
-   });
+module.exports = function (info, callback) {
+    var conn = info.conn || databaseconf.createConn();
+    conn.query('UPDATE `chengyu`.`CY_name` SET `views` = ' + (+info.curviews + 1) + ' WHERE `CY_name`.`id` =' + info.id, function (err, items, filed) {
+        typeof callback === 'function' && callback(err, items, filed);
+    });
 };
-
