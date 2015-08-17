@@ -26,6 +26,7 @@ var databaseconf = require(__dirname + '/../database/database');
 module.exports = function (key, callback) {
     var conn = databaseconf.createConn();
     var key = decodeURIComponent(key);
+    
     conn.query('SELECT *  FROM `CY_name` WHERE `name`=\'' + key + '\'', function (err, data) {
         if (err || !data[0]) {
             typeof callback === 'function' && callback([{

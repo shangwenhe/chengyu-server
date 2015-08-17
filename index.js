@@ -59,7 +59,8 @@ var queryByName = require('./widget/queryByName/queryByName');
 app.get('/get', function (req, res) {
     var params = url.parse(req.url, true).query;
     res.type("text/html;charset=utf-8");
-    queryByName(params.name, function(data){
+    
+    queryByName(params.name.replace(/\#.*$/,''), function(data){
         var result = JSON.stringify(data);
         if (!!params.callback) {
             var result = params.callback + '(' + result + ')';
