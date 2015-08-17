@@ -70,7 +70,7 @@ app.get('/get', function (req, res) {
 });
 
 
-app.get('/page', function (req, res) {
+app.get('/page.html', function (req, res) {
     res.render('page', {title:'paint title'});
 });
 var list = require('./widget/list/list');

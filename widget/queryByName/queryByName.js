@@ -27,10 +27,22 @@ module.exports = function (key, callback) {
     var conn = databaseconf.createConn();
     var key = decodeURIComponent(key);
     conn.query('SELECT *  FROM `CY_name` WHERE `name`=\'' + key + '\'', function (err, data) {
-        if (err) {} else {
+        if (err || !data[0]) {
+            typeof callback === 'function' && callback([{
+                error: true
+            }]);
+
+        } else {
             var id = data[0].id;
             conn.query('SELECT *  FROM `CY_analysis` WHERE `id`=\'' + id + '\'', function (err, info) {
-                if (err) {} else {
+                if (err) {
+
+                } else if (!info[0]) {
+                    typeof callback === 'function' && callback([{
+                        error: true,
+                        status: 'noresult'
+                    }]);
+                } else {
                     var result = [];
                     var info = info[0];
                     console.log(info);
@@ -46,16 +58,16 @@ module.exports = function (key, callback) {
                         views: data[0].views
                     });
                     console.log({
-                         id: data[0].id,
-                         curviews: data[0].views
-                     })
-                     updateViews({
-                         conn: conn,
-                         id: data[0].id,
-                         curviews: data[0].views
-                     }, function () {
-                         conn.end();
-                     });
+                        id: data[0].id,
+                        curviews: data[0].views
+                    })
+                    updateViews({
+                        conn: conn,
+                        id: data[0].id,
+                        curviews: data[0].views
+                    }, function () {
+                        conn.end();
+                    });
                     typeof callback === 'function' && callback(result);
                 }
             });
