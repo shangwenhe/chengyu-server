@@ -11,16 +11,6 @@
 
 var databaseconf = require(__dirname + '/../database/database');
 
-function html2Escape(sHtml) {
-    return sHtml.replace(/[<>&"]/g, function (c) {
-        return {
-            '<': '&lt;',
-            '>': '&gt;',
-            '&': '&amp;',
-            '"': '&quot;'
-        }[c];
-    });
-}
 
 var updateViews = require(__dirname + '/../views/views');
 module.exports = function (len, callback) {
@@ -51,10 +41,10 @@ module.exports = function (len, callback) {
                         info = info[0];
                         result.push({
                             name: item[key].name,
-                            sound: html2Escape(info.soundLetter),
-                            analysis: html2Escape(info.analysis),
-                            sample: html2Escape(info.sample),
-                            fromto: html2Escape(info.fromto),
+                            sound: info.soundLetter,
+                            analysis: info.analysis,
+                            sample: info.sample,
+                            fromto: info.fromto,
                             synonyms: info.synonyms,
                             antonym: info.antonym,
                             holding: info.holding,

@@ -12,11 +12,28 @@
 
 
 var databaseconf = require(__dirname + '/../database/database');
-module.exports = function (page, callback) {
+module.exports = function (param, callback) {
+
     var conn = databaseconf.createConn();
-    conn.query('SELECT * FROM `CY_name` ORDER BY views limit 30', function (err, data) {
-       if(err){}else{
-        typeof callback === 'function' && callback(data);
-       } 
-    });
+    if (param.wl) {
+        var wlArr = [];
+        for (var i = 0; i < param.wl; i++) {
+            wlArr.push('_');
+        }
+        var desc = wlArr.length > 5 ? 'DESC' : '';
+        conn.query('SELECT * FROM `CY_name` WHERE name LIKE \'' + wlArr.join('') + '\' ORDER BY views ' + desc + ' LIMIT 30', function (err, data) {
+            if (err) {} else {
+                typeof callback === 'function' && callback(data);
+            }
+        });
+
+
+    } else {
+        conn.query('SELECT * FROM `CY_name` ORDER BY views LIMIT 30', function (err, data) {
+            if (err) {} else {
+                typeof callback === 'function' && callback(data);
+            }
+        });
+
+    }
 };

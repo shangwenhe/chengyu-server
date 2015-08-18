@@ -10,16 +10,6 @@
 // widget/queryByName/queryByName.js start
 
 
-function html2Escape(sHtml) {
-    return sHtml.replace(/[<>&"]/g, function (c) {
-        return {
-            '<': '&lt;',
-            '>': '&gt;',
-            '&': '&amp;',
-            '"': '&quot;'
-        }[c];
-    });
-}
 
 var updateViews = require(__dirname + '/../views/views');
 var databaseconf = require(__dirname + '/../database/database');
@@ -49,10 +39,10 @@ module.exports = function (key, callback) {
                     console.log(info);
                     result.push({
                         name: data[0].name,
-                        sound: html2Escape(info.soundLetter),
-                        analysis: html2Escape(info.analysis),
-                        sample: html2Escape(info.sample),
-                        fromto: html2Escape(info.fromto),
+                        sound: info.soundLetter,
+                        analysis: info.analysis,
+                        sample: info.sample,
+                        fromto: info.fromto,
                         synonyms: info.synonyms,
                         antonym: info.antonym,
                         holding: info.holding,

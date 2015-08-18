@@ -17,7 +17,30 @@ var url = require('url');
 
 app.set('prot', 8090);
 app.get('/', function (req, res) {
-    res.render('index', {title:'paint title'});
+    res.type("text/html;charset=utf-8");
+    var params = url.parse(req.url, true).query;
+    console.log(params);
+    if (params.name) {
+
+        queryByName(params.name.replace(/\#.*$/, ''), function (data) {
+
+            res.render('index', {
+                title: data[0]['name'],
+                data: data
+            });
+
+        })
+    } else {
+
+        getRandData(1, function (data) {
+
+            res.render('index', {
+                title: data[0]['name'],
+                data: data
+            });
+
+        });
+    }
 });
 
 // 随机取得数据
@@ -43,14 +66,14 @@ app.get('/search', function (req, res) {
     var params = url.parse(req.url, true).query;
     res.type("text/html;charset=utf-8");
     // 将参数decodeURIComponent
-    search(decodeURIComponent(params.k), function(data){
+    search(decodeURIComponent(params.k), function (data) {
         var result = JSON.stringify(data);
         if (!!params.callback) {
             var result = params.callback + '(' + result + ')';
         }
         res.end(result);
-        
-        }) 
+
+    })
 });
 
 
@@ -59,33 +82,35 @@ var queryByName = require('./widget/queryByName/queryByName');
 app.get('/get', function (req, res) {
     var params = url.parse(req.url, true).query;
     res.type("text/html;charset=utf-8");
-    
-    queryByName(params.name.replace(/\#.*$/,''), function(data){
+
+    queryByName(params.name.replace(/\#.*$/, ''), function (data) {
         var result = JSON.stringify(data);
         if (!!params.callback) {
             var result = params.callback + '(' + result + ')';
         }
         res.end(result);
-        
-        }) 
+
+    })
 });
 
 
 app.get('/page.html', function (req, res) {
-    res.render('page', {title:'paint title'});
+    res.render('page', {
+        title: 'paint title'
+    });
 });
 var list = require('./widget/list/list');
 app.get('/list', function (req, res) {
     var params = url.parse(req.url, true).query;
     res.type("text/html;charset=utf-8");
-    list(params.page || 1, function(data){
+    list(params, function (data) {
         var result = JSON.stringify(data);
         if (!!params.callback) {
             var result = params.callback + '(' + result + ')';
         }
         res.end(result);
-        
-        }) 
+
+    })
 });
 
 // 端口
